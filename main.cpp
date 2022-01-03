@@ -24,100 +24,104 @@ void createarea(int x,int y,int xx,int yy)
     nrb++;
 }
 
-void ProcessBlock(int x,int y)
+void ProcessBlock(int x,int y,int X,int Y)
 {
     setlinestyle(0,2,3);
-    rectangle(x-CT1,y-CT2,x+CT1,y+CT2);
-    createarea(x-CT1,y-CT2,x+CT1,y+CT2);
+    line(x,y,x+X,y);
+    line(x,y,x,y+Y);
+    line(x+X,y,x+X,y+Y);
+    line(x,y+Y,x+DIMX,y+Y);
+
+    createarea(x,y,X,Y);
     //floodfill(x,y,WHITE);
 }
 
-void Normal_Loop(int x,int y,int conditions,int &L)
+void Normal_Loop(int x,int y,int conditions,int &L,int X,int Y,int S)
 {
     int c1_x,c1_y,c2_x,c2_y;
     setlinestyle(0,2,3);
-    c1_x=x+SPL;       c1_y=y+DIMY;
-    c2_x=x+DIMX;     c2_y=y+DIMY;
+    c1_x=x+S;     c1_y=y+Y;
+    c2_x=x+X;     c2_y=y+Y;
     L=y+(50*(1+conditions));
     //desenam
-    line(x,y,x+DIMX,y);
-    line(x+DIMX,y,x+DIMX,y+DIMY);
-    line(x+SPL,y+DIMY,x+DIMX,y+DIMY);
+    line(x,y,x+X,y);
+    line(x+X,y,x+X,y+Y);
+    line(x+S,y+Y,x+X,y+Y);
     line(x,y,x,L);
-    line(x+SPL,y+DIMY,x+SPL,L);
-    line(x,L,x+SPL,L);
+    line(x+S,y+Y,x+S,L);
+    line(x,L,x+S,L);
     //desenam conditiile
     for(int i=1;i<=conditions;i++)
     {
-        line(c2_x,c2_y,c2_x,c2_y+DIMY);
-        line(c2_x,c2_y+DIMY,c1_x,c1_y+DIMY);
+        line(c2_x,c2_y,c2_x,c2_y+Y);
+        line(c2_x,c2_y+Y,c1_x,c1_y+Y);
 
         //CONDITIONS NAME
-        c1_y+=DIMY;   c2_y+=DIMY;
+        c1_y+=Y;   c2_y+=Y;
     }
     //floodfill(x,y,WHITE);
-    createarea(x,y,x+DIMX,y+DIMY);
+    createarea(x,y,x+X,y+Y);
 }
-void Reverse_Loop(int x,int y,int conditions,int &L)
+void Reverse_Loop(int x,int y,int conditions,int &L,int X,int Y,int S)
 {
     int c1_x,c1_y,c2_x,c2_y;
-    c1_x=x+SPL;       c1_y=y;
-    c2_x=x+DIMX;     c2_y=y;
+    c1_x=x+S;     c1_y=y;
+    c2_x=x+X;     c2_y=y;
     L=y+(50*(1+conditions));
     setlinestyle(0,2,3);
     //desneam conditiile
     for(int i=1;i<=conditions;i++)
     {
         line(c1_x,c1_y,c2_x,c2_y);
-        line(c2_x,c2_y,c2_x,c2_y+DIMY);
+        line(c2_x,c2_y,c2_x,c2_y+Y);
         //CONDITIONS NAME
-        c1_y+=DIMY;   c2_y+=DIMY;
+        c1_y+=Y;   c2_y+=Y;
 
     }
     //desenam
     line(c1_x,c1_y,c2_x,c2_y);
     line(x,y,x,L);
-    line(x,L,x+DIMX,L);
-    line(x+DIMX,L,x+DIMX,L);
-    line(x+DIMX,L,x+DIMX,L-DIMY);
-    line(x,y,x+SPL,y);
-    line(x+SPL,L-DIMY,x+SPL,y);
+    line(x,L,x+X,L);
+    line(x+X,L,x+X,L);
+    line(x+X,L,x+X,L-Y);
+    line(x,y,x+S,y);
+    line(x+S,L-Y,x+S,y);
     //floodfill(x,y,WHITE);
-    createarea(x,y,x+DIMX,y+DIMY);
+    createarea(x,y,x+X,y+Y);
 }
 
-void True_Triangle(int x,int y,int Ax,int Ay)
+void True_Triangle(int x,int y,int Ax,int Ay,int X,int Y,int C1,int C2)
 {
     int Mx,My;
     setlinestyle(0,2,3);
-    line(x,y,x,y+DIMY);
-    line(x,y+DIMY,x+CT1,y+DIMY);
-    line(x,y,x+CT1,y+DIMY);
-    Mx= Ax+CT2;  My=Ay+CT2;
+    line(x,y,x,y+Y);
+    line(x,y+Y,x+C1,y+Y);
+    line(x,y,x+C1,y+Y);
+    Mx= Ax+C2;  My=Ay+C2;
 
 }
-void False_Triangle(int x,int y,int Bx,int By)
+void False_Triangle(int x,int y,int Bx,int By,int X,int Y,int C1,int C2)
 {
     int Mx,My;
     setlinestyle(0,2,3);
-    line(x+DIMX,y,x+DIMX,y+DIMY);
-    line(x+DIMX,y+DIMY,x+CT1,y+DIMY);
-    line(x+CT1,y+DIMY,x+DIMX,y);
-    Mx= Bx-(CT2*2);  My=By+CT2;
+    line(x+X,y,x+X,y+Y);
+    line(x+X,y+Y,x+C1,y+Y);
+    line(x+C1,y+Y,x+X,y);
+    Mx= Bx-(C2*2);  My=By+C2;
 
 
 }
 
-void BranchingBlock(int x,int y)
+void BranchingBlock(int x,int y,int X,int Y,int C1,int C2)
 {
     int Ax,Ay,Bx,By;
     Ax=x;        Ay=y;
-    Bx=x+DIMX;   By=y;
+    Bx=x+X;   By=y;
     setlinestyle(0,2,3);
-    line(x,y,x+DIMX,y);
-    True_Triangle(x,y,Ax,Ay);
-    False_Triangle(x,y,Bx,By);
-    createarea(x,y,x+DIMX,y+DIMY);
+    line(x,y,x+X,y);
+    True_Triangle(x,y,Ax,Ay,X,Y,C1,C2);
+    False_Triangle(x,y,Bx,By,X,Y,C1,C2);
+    createarea(x,y,x+X,y+Y);
 }
 
 // blocks for Legend
@@ -223,7 +227,7 @@ void BranchingBlockL(int x,int y)
 }
 
 
-//main program
+//main menu
 int windowx=1300,windowy=850;
 void menu()
 {
@@ -250,15 +254,15 @@ void legenda(int L)
 
     settextstyle(4,0,3);
     outtextxy(bordx-250,bordy+20,"Process Block");
-    ProcessBlock(bordx+75,bordy+25);
+    ProcessBlockL(bordx+75,bordy+25);
     bordy+=DIMY;
 
     outtextxy(bordx-100,bordy+50,"Loop");
-    Normal_Loop(bordx,bordy,2,L);
+    Normal_LoopL(bordx,bordy,2,L);
     bordy*=2;
 
     outtextxy(bordx-180,bordy,"Reverse L");
-    Reverse_Loop(bordx,bordy-50,2,L);
+    Reverse_LoopL(bordx,bordy-50,2,L);
     bordy+=(DIMY*2);
 
     outtextxy(bordx-190,bordy+20,"If Statment");
@@ -319,7 +323,9 @@ int main()
 
     initwindow(windowx,windowy);
     floodfill(0,0,WHITE);
-    int startpx=100,startpy=100,L=0,x,y;
+    int startpx=100,startpy=100,L=0;
+    //declare dimensiuni initiale
+    int X=DIMX,Y=DIMY,C1=CT1,C2=CT2,S=SPL;
     menu();
     legenda(L);
     /*
@@ -348,14 +354,17 @@ int main()
 
     //Individual display
 
-    ProcessBlock(startpx+75,startpy+25);
-    //Normal_Loop(startpx,startpy,2,L);
-    //Reverse_Loop(startpx,startpy,2,L);
-    //BranchingBlock(startpx,startpy);
+    ProcessBlock(startpx,startpy,X,Y);
+    //Normal_Loop(startpx,startpy,2,L,X,Y,S);
+    //Reverse_Loop(startpx,startpy,2,L,X,Y,S);
+    //BranchingBlock(startpx,startpy,X,Y,C1,C2);
 
 
     //search in file
     //simple,if,else,while,for,etc.
+    //while reading code->display blocks
+    //if ( for in for ) modify X and Y ( S AND C1,C2 if necesarry), startpx,startpy
+    //else return to X=DIMX,Y=DIMY,S=SPL,C1=CT1,C2=CT2
     getch();
     closegraph();
     return 0;
